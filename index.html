@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CRUD in JavaScript</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    input, button { margin: 5px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+  </style>
+</head>
+<body>
+
+  <h1>User Management (JS CRUD)</h1>
+
+  <input type="text" id="nameInput" placeholder="Enter name">
+  <button onclick="addUser()">Add</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="userTableBody"></tbody>
+  </table>
+
+  <script>
+    let users = [];
+    let editIndex = null;
+
+    function renderTable() {
+      const table = document.getElementById('userTableBody');
+      table.innerHTML = '';
+      users.forEach((user, index) => {
+        table.innerHTML += `
+          <tr>
+            <td>${user}</td>
+            <td>
+              <button onclick="editUser(${index})">Edit</button>
+              <button onclick="deleteUser(${index})">Delete</button>
+            </td>
+          </tr>`;
+      });
+    }
+
+    function addUser() {
+      const input = document.getElementById('nameInput');
+      const name = input.value.trim();
+
+      if (name === '') return alert("Name can't be empty");
+
+      if (editIndex !== null) {
+        users[editIndex] = name;
+        editIndex = null;
+      } else {
+        users.push(name);
+      }
+
+      input.value = '';
+      renderTable();
+    }
+
+    function editUser(index) {
+      document.getElementById('nameInput').value = users[index];
+      editIndex = index;
+    }
+
+    function deleteUser(index) {
+      if (confirm("Are you sure?")) {
+        users.splice(index, 1);
+        renderTable();
+      }
+    }
+
+    // Initial render
+    renderTable();
+  </script>
+
+</body>
+</html>
